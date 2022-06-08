@@ -6,39 +6,53 @@
   <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
   </script>
   <script>
-    $(document).ready(function () {
-    });
     let arr = []
+    let index = 0
     function addBtn() {
-      var num = arr.length + 1
-      if(num>5){
+      let length = arr.filter(checkNullFilter).length + 1
+      if(length>5){
         console.log("超过5个不可以哦")
       } else {
+        let num = ++index
         var html = '<div id="div'+num+'"><input id='+ num +' onblur="check('+num+')" /><button onclick="deleBtn('+num+')"  onclick="check('+num+')" >-</button></div>'
         arr.push("")
         $("#content").append(html);
       }
     }
     function check(num) {
-      // for(let i = num; i < map.size; i++) {
-        
-
-      // }
       arr[num-1] = $("#"+num).val()
-      // console.log(num)
+    }
+    function checkNullFilter(arg) {
+        return arg !== null;
     }
     function deleBtn(num) {
-      arr.splice(num-1,1)
+      arr[num-1] = null
 			$('#div'+num).remove();
 
+    }
+    function submitForm(params) {
+      $("#contentSubmit").html("")
+      const arr1 = arr.filter(checkNullFilter)
+      for(let i = 1; i <= arr1.length; i++) {
+        let html = '<input type="hidden" name="ip_addr'+ i +'" value="'+ arr1[i-1] +'"/>'
+        $("#contentSubmit").append(html)
+      }
+      var params = $("#addform").serialize();
+
+      console.log(params)
     }
   </script>
 </head>
 
 <body>
   <button id="btn1"  onclick="addBtn()">添加文本</button>
-  <div id="content">
-  </div>
+  <form action="" method="post" id="addform">
+    <div id="content">
+    </div>
+    <div id="contentSubmit"></div>
+    <button type="button" onclick="submitForm()">提交</button>
+  </form>
+  
 </body>
 
 </html>
